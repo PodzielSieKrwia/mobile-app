@@ -1,0 +1,16 @@
+<Page xmlns="http://schemas.nativescript.org/tns.xsd" navigatingTo="navigatingTo" class="page">
+
+<Page.actionBar>
+    <ActionBar title="Ustawienia" icon="" class="action-bar">
+    </ActionBar>
+</Page.actionBar>
+
+<StackLayout class="p-20">
+    <ListView items="{{ options }}" itemTap="onItemTap">
+        <ListView.itemTemplate>
+            <Label text="{{ label }}" textWrap="true"/>
+        </ListView.itemTemplate>
+    </ListView>
+</StackLayout>
+
+</Page>

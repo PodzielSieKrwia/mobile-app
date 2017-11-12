@@ -1,0 +1,14 @@
+<Page xmlns="http://schemas.nativescript.org/tns.xsd" navigatingTo="navigatingTo" class="page">
+
+<Page.actionBar>
+    <ActionBar title="Wybierz swoją grupę krwi" icon="" class="action-bar">
+    </ActionBar>
+</Page.actionBar>
+
+<StackLayout class="p-20">
+    <ListPicker row="1" items="{{bloodTypes}}" selectedIndex="{{selectedIndex}}"></ListPicker>
+    <Button text="Ustaw" tap="apply" class="btn btn-primary btn-active" visibility="{{wizard?'visible':'collapse'}}"/>
+    <Button text="Pomiń" tap="next" class="btn" visibility="{{wizard?'visible':'collapse'}}"/>
+</StackLayout>
+
+</Page>
