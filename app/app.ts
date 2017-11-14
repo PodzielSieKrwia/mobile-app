@@ -6,12 +6,8 @@ purpose of the file is to pass control to the app’s first module.
 
 import "./bundle-config";
 import * as app from 'application';
-import {appModel} from './main-view-model';
 
-appModel.doInit();
-
-app.start({ moduleName: 'main-page' });
-
+app.start({ moduleName: 'views/welcome-page' });
 /*
 Do not place any code after the application has been started as it will not
 be executed on iOS.

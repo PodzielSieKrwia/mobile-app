@@ -2,33 +2,41 @@ import { Page } from 'ui/page';
 import { EventData } from 'data/observable';
 import { Observable } from 'tns-core-modules/ui/frame/frame';
 import * as frame from 'ui/frame';
-import { AppModel, appModel } from '../main-view-model';
+import { AppModel, appModel } from '../shared/app-model'
+import {Wizard} from './wizard';
 
 class PageModel extends Observable {
+
+    selected:number;
+    wizard:Wizard;
 
     constructor(public appModel:AppModel) {
         super();
     }
 }
 
-const model = new PageModel(appModel);
+const pageModel = new PageModel(appModel);
 
 export function navigatingTo(args: EventData) {
     let page = <Page>args.object; 
-    page.bindingContext = model;
-    model.set('wizard', page.navigationContext.wizard);
+    pageModel.wizard = page.navigationContext.wizard; //any setters must be called before binding!
+    page.bindingContext = pageModel;
 }
 
 export function next() {
-    frame.topmost().navigate({moduleName:'/views/set-sex', context: {wizard: model.get('wizard')}});
+    pageModel.wizard.next().navigate();
 }
 
 export function apply() {
-    //TODO store in profile
-    next();
+    if (pageModel.selected !== undefined) {
+        const stationUid = pageModel.appModel.get('stations')[pageModel.selected].uid;
+        appModel.updateUserProfile({station:stationUid});
+        next();
+    }
 }
 
 export function onItemTap(args) {
-    console.log("export.setStation ["+ model.appModel.get('stations')[args.index]+"]");
+    pageModel.selected = args.index;
+    console.log("export.setStation "+pageModel.selected);
 }
 

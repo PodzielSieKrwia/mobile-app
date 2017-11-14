@@ -13,14 +13,14 @@ export interface Location {
 }
 
 export interface Station {
-    uid?:string,
+    uid?:string
     name?:string
     address?:string
     contact?: {
-        phones?:Phone[],
+        phones?:Phone[]
         emails?:Email[]
     }
-    location? : Location,
+    location? : Location
     website? : string
     parent? : string
 }
@@ -29,4 +29,12 @@ export interface Stations {
     [index: string]: Station;
 }
 
+export interface UserProfile {
+    wizardCompleted?:boolean
+    station?:string
+    bloodType?:string
+    sex?:string
+}
+
 export const BLOOD_TYPES = ['0-','0+','B-','B+','A-','A+','AB-','AB+']
+export const SEX = ['W','M'];

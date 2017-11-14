@@ -1,0 +1,8 @@
+<Page xmlns="http://schemas.nativescript.org/tns.xsd" navigatingTo="navigatingTo" navigatedFrom="navigatedFrom" class="page">   
+<StackLayout>
+    <Label text="{{status}}"/>
+    <ActivityIndicator busy="{{ isLoading }}" />
+    <Button tap="init" text="Start"/>
+    <Button tap="logout" text="Logout"/>
+</StackLayout>
+</Page>

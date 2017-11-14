@@ -5,7 +5,7 @@ import { isIOS } from "tns-core-modules/platform";
 import { AddEventListenerResult } from "nativescript-plugin-firebase";
 import * as fs from "tns-core-modules/file-system";
 const firebase = require("nativescript-plugin-firebase");
-import { Station,Stations,BLOOD_TYPES} from "./model"
+import { Station,Stations,BLOOD_TYPES, UserProfile} from "./schema"
 import { ObservableArray, ChangedData, ChangeType } from "tns-core-modules/data/observable-array";
 
 declare const assert: any;
@@ -16,51 +16,57 @@ export class AppModel extends Observable {
   private userListenerWrapper: AddEventListenerResult;
   private companiesListenerWrapper: AddEventListenerResult;
 
-  public doInit(): void {
-    firebase.init({
-      //storageBucket: 'gs://n-plugin-test.appspot.com',
-      persist: true,
-      onAuthStateChanged: data => this.onAuthStateChanged(data),
-      // testing push wiring in init for iOS:
-    //   onPushTokenReceivedCallback: token => {
-    //     // you can use this token to send to your own backend server,
-    //     // so you can send notifications to this specific device
-    //     console.log("Firebase plugin received a push token: " + token);
-    //     // this is for iOS, to copy the token onto the clipboard
-    //     if (isIOS) {
-    //       const pasteboard = iosUtils.getter(UIPasteboard, UIPasteboard.generalPasteboard);
-    //       pasteboard.setValueForPasteboardType("[Firebase demo app] Last push token received: " + token, kUTTypePlainText);
-    //     }
-    //   },
-      onMessageReceivedCallback: message => {
-        console.log("--- message received: " + message);
-        setTimeout(() => {
-          alert({
-            title: "Push message!",
-            message: (message.title !== undefined ? message.title : ""),
-            okButtonText: "Sw33t"
-          });
-        }, 500);
-      },
-      onDynamicLinkCallback: result => {
-        console.log("dynamic link callback invoked with: " + result);
-        setTimeout(() => {
-          alert({
-            title: "Dynamic Link!",
-            message: result,
-            okButtonText: "Awesome!"
-          });
-        }, 500);
-      }
-    }).then(
-        () => this.onFirebaseReady(),
-        error => {
-          console.error("firebase.init error: " + error); //TODO what to do
-        }
-    );
-
-
+  public doInit(): Promise<any> {
     this.set('bloodTypes',BLOOD_TYPES);
+
+    return firebase.init({
+        //storageBucket: 'gs://n-plugin-test.appspot.com',
+        persist: true,
+        onAuthStateChanged: data => {
+          console.log('onAuthStateChanged '+JSON.stringify(data));
+          this.set('user',data.user);
+          if (data.user) {
+            //TODO in case of re-authentication, do we need to remove previous value listener?
+            firebase.addValueEventListener(result=>{
+              console.log('user profile change', JSON.stringify(result.value));
+              this.set('userprofile', result.value);
+            }, "/users/"+data.user.uid);
+          }
+        },
+        // testing push wiring in init for iOS:
+      //   onPushTokenReceivedCallback: token => {
+      //     // you can use this token to send to your own backend server,
+      //     // so you can send notifications to this specific device
+      //     console.log("Firebase plugin received a push token: " + token);
+      //     // this is for iOS, to copy the token onto the clipboard
+      //     if (isIOS) {
+      //       const pasteboard = iosUtils.getter(UIPasteboard, UIPasteboard.generalPasteboard);
+      //       pasteboard.setValueForPasteboardType("[Firebase demo app] Last push token received: " + token, kUTTypePlainText);
+      //     }
+      //   },
+        onMessageReceivedCallback: message => {
+          console.log("--- message received: " + message);
+          setTimeout(() => {
+            alert({
+              title: "Push message!",
+              message: (message.title !== undefined ? message.title : ""),
+              okButtonText: "Sw33t"
+            });
+          }, 500);
+        },
+        onDynamicLinkCallback: result => {
+          console.log("dynamic link callback invoked with: " + result);
+          setTimeout(() => {
+            alert({
+              title: "Dynamic Link!",
+              message: result,
+              okButtonText: "Awesome!"
+            });
+          }, 500);
+        }
+      }).then(
+          () => this.onFirebaseReady()
+      );
   }
 
   private onFirebaseReady() {
@@ -111,24 +117,14 @@ export class AppModel extends Observable {
     }
   }
 
-  private doLoginAnonymously(): void {
-    firebase.login({
+  public doLoginAnonymously(): Promise<any> {
+    return firebase.login({
       type: firebase.LoginType.ANONYMOUS
-    }).then(
-        result => {
-          alert({
-            title: "Login OK",
-            message: JSON.stringify(result),
-            okButtonText: "Nice!"
-          });
-        },
-        errorMessage => {
-          action({
-            message: errorMessage,
-            actions: ['REPEAT'],
-          }).then(result=>{console.log('OK '+result)}, err=>{'ERR '+console.log(err)});
-        }
-    );
+    });
+  }
+
+  public doLogout() {
+    return firebase.logout();
   }
 
   public doGetCurrentUser(): void {
@@ -149,6 +145,15 @@ export class AppModel extends Observable {
         }
     );
   }
+
+  public updateUserProfile(change:UserProfile) {
+    const user = this.get('user');
+    if (!user) {
+      throw new Error('no user');
+    } else {
+      firebase.update('/users/'+user.uid, change); 
+    }
+  } 
 /*
   public doLogAnayticsEvent(): void {
     firebase.analytics.logEvent({
