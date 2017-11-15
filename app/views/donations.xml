@@ -1,0 +1,17 @@
+<Page xmlns="http://schemas.nativescript.org/tns.xsd" navigatingTo="navigatingTo" class="page">
+
+<Page.actionBar>
+    <ActionBar title="Donacje" icon="" class="action-bar">
+        <ActionItem tap="newDonation"
+        ios.systemIcon="4" ios.position="right"
+        android.systemIcon="ic_menu_add" android.position="actionBar"/>
+    </ActionBar>
+</Page.actionBar>
+
+<ListView items="{{ appModel.userprofile.donations }}" itemTap="onItemTap">
+    <ListView.itemTemplate>
+        <Label text="{{ date }}" textWrap="true"/>
+    </ListView.itemTemplate>
+</ListView>
+
+</Page>

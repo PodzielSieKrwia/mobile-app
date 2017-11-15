@@ -1,20 +1,21 @@
 import { Observable } from "tns-core-modules/data/observable";
-import { alert, prompt, action } from "tns-core-modules/ui/dialogs";
+import { alert, prompt, action, LoginResult } from "tns-core-modules/ui/dialogs";
 import { ios as iosUtils } from "tns-core-modules/utils/utils";
 import { isIOS } from "tns-core-modules/platform";
 import { AddEventListenerResult } from "nativescript-plugin-firebase";
 import * as fs from "tns-core-modules/file-system";
-const firebase = require("nativescript-plugin-firebase");
 import { Station,Stations,BLOOD_TYPES, UserProfile} from "./schema"
 import { ObservableArray, ChangedData, ChangeType } from "tns-core-modules/data/observable-array";
+import {User} from 'nativescript-plugin-firebase';
+
+const firebase = require("nativescript-plugin-firebase");
 
 declare const assert: any;
 
 export class AppModel extends Observable {
 
-  public userEmailOrPhone: string;
-  private userListenerWrapper: AddEventListenerResult;
-  private companiesListenerWrapper: AddEventListenerResult;
+  public user: User;
+  public userprofile: UserProfile;
 
   public doInit(): Promise<any> {
     this.set('bloodTypes',BLOOD_TYPES);

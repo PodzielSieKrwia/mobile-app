@@ -74,15 +74,10 @@ function navigateToWizard() {
     new Wizard([
             {moduleName:'views/set-blood-type',clearHistory:true},
             {moduleName:'/views/set-blood-station'},
-            {moduleName:'views/set-sex'},{moduleName:'views/main-view',clearHistory:true}
+            {moduleName:'views/set-sex'},
+            {moduleName:'views/main-view',clearHistory:true}    //TODO clearHistory here seems to break back nav from 'donations' ?
         ])
         .navigate();
-
-    // frame.topmost().navigate({
-    //     moduleName: "views/set-blood-type",
-    //     clearHistory: true,
-    //     context : {wizard:}
-    // });
 }
 
 function navigateToMainView() {

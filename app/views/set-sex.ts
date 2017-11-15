@@ -4,13 +4,13 @@ import { Observable } from 'tns-core-modules/ui/frame/frame';
 import * as frame from 'ui/frame';
 import { ObservableArray } from 'tns-core-modules/data/observable-array/observable-array';
 import { appModel } from '../shared/app-model';
-import { SEX } from '../shared/schema';
+import { SEX, MSG } from '../shared/schema';
 import {Wizard} from './wizard';
 
 class PageModel extends Observable {
     wizard:Wizard;
     selectedIndex:number;
-    sex = SEX.map(val=>(val==='W'?'Kobieta':'Mezczyzna'))
+    sex = SEX.map(val=>(MSG.pl['sex.'+val]))
 
     constructor() {
         super();

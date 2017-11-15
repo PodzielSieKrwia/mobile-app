@@ -1,0 +1,16 @@
+<Page xmlns="http://schemas.nativescript.org/tns.xsd" loaded="onLoaded" shownModally="onShownModally" class="page">
+
+    <ActionBar title="Nowa donacja" icon="" class="action-bar">
+    </ActionBar>
+
+<StackLayout>
+    <DatePicker date="{{date}}"/>
+
+    <ListPicker row="1" items="{{type}}" selectedIndex="{{selectedType}}"></ListPicker>
+    
+    
+
+    <Button text="Dodaj" tap="onAdd"/>
+</StackLayout>
+
+</Page>

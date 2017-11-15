@@ -6,7 +6,7 @@
 </Page.actionBar>
 
 <StackLayout class="p-20">
-    <Button text="Donacja" tap="newDonation"/>
+    <Button text="Donacje" tap="donations"/>
     <Button text="Ustawienia" tap="settings"/>
 </StackLayout>
 
