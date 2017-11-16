@@ -8,9 +8,13 @@
     </ActionBar>
 </Page.actionBar>
 
-<ListView items="{{ appModel.userprofile.donations }}" itemTap="onItemTap">
+<ListView class="list-group" items="{{ appModel.userprofile.donations }}" itemTap="onItemTap">
     <ListView.itemTemplate>
-        <Label text="{{ date }}" textWrap="true"/>
+        <StackLayout class="list-group-item">
+            <Label text="{{ date }}" textWrap="true"/>
+            <Label text="{{ date | fromNow }}" textWrap="true"/>
+            <Label text="{{ type | msg('donation_type.') }}" textWrap="true"/>
+        </StackLayout>
     </ListView.itemTemplate>
 </ListView>
 

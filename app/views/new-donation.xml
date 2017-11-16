@@ -4,10 +4,18 @@
     </ActionBar>
 
 <StackLayout>
+    
+    
+    <SegmentedBar items="{{type}}" selectedIndex="{{selectedType}}">
+  <SegmentedBar.items>
+    <SegmentedBarItem title="Krew" />
+    <SegmentedBarItem title="Osocze" />
+    <SegmentedBarItem title="Płytki" />
+  </SegmentedBar.items>
+</SegmentedBar>
+    
     <DatePicker date="{{date}}"/>
 
-    <ListPicker row="1" items="{{type}}" selectedIndex="{{selectedType}}"></ListPicker>
-    
     
 
     <Button text="Dodaj" tap="onAdd"/>

@@ -84,7 +84,7 @@ function navigateToMainView() {
     pageModel.set('isLoading', false);
     frame.topmost().navigate({
         moduleName: "views/main-view",
-        clearHistory: true
+        clearHistory: true  //this is either broken or clear history AFTER navigation is done :)
     });
 }
 
