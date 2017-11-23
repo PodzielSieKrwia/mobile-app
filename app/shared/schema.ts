@@ -37,7 +37,7 @@ export interface Donation {
 
 export interface UserProfile {
     wizardCompleted?:boolean
-    station?:string
+    stationUid?:string
     bloodType?:string
     sex?:string
     donations?: Donation[]

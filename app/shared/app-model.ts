@@ -16,6 +16,7 @@ export class AppModel extends Observable {
 
   public user: User;
   public userprofile: UserProfile;
+  public stations: Station[];
 
   public doInit(): Promise<any> {
     this.set('bloodTypes',BLOOD_TYPES);
@@ -90,7 +91,7 @@ export class AppModel extends Observable {
     Object.getOwnPropertyNames(stations).forEach(uid=>{
       _stations.push(Object.assign({uid:uid}, stations[uid]));
     });
-    console.log("_stations",_stations); 
+    //console.log("_stations",_stations); 
     this.set("stations",_stations);
   }
 
@@ -148,6 +149,7 @@ export class AppModel extends Observable {
   }
 
   public updateUserProfile(change:UserProfile) {
+    console.log('update user profile += '+JSON.stringify(change))
     const user = this.get('user');
     if (!user) {
       throw new Error('no user');

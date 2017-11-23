@@ -5,12 +5,12 @@
     </ActionBar>
 </Page.actionBar>
 
-<StackLayout class="p-20">
-    <ListView items="{{ options }}" itemTap="onItemTap">
+    <ListView items="{{ options }}" itemTap="onItemTap" class="list-group">
         <ListView.itemTemplate>
-            <Label text="{{ label }}" textWrap="true"/>
+            <StackLayout class="list-group-item">
+                <Label text="{{ label }}" textWrap="true"/>
+            </StackLayout>
         </ListView.itemTemplate>
     </ListView>
-</StackLayout>
 
 </Page>

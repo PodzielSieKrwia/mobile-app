@@ -1,6 +1,6 @@
 import { Page } from 'ui/page';
 import { EventData } from 'data/observable';
-import {BLOOD_TYPES} from '../shared/schema';
+import {BLOOD_TYPES, UserProfile} from '../shared/schema';
 import { Observable } from 'tns-core-modules/ui/frame/frame';
 import * as frame from 'ui/frame';
 import {appModel} from '../shared/app-model';
@@ -8,34 +8,40 @@ import {Wizard} from './wizard';
 
 class PageModel extends Observable {
 
-    wizard:Wizard;
+    bloodTypes: string[]
+    selectedIndex:number
+    skip:boolean
 
-    constructor() {
-        super();
-        this.set('bloodTypes', BLOOD_TYPES);
-        this.set('selectedIndex', 0);
+    constructor(userprofile:UserProfile, public wizard:Wizard) {
+        super()
+        this.bloodTypes = BLOOD_TYPES
+        this.selectedIndex = userprofile ? BLOOD_TYPES.indexOf(userprofile.bloodType) : 0
     }
 }
 
-const model = new PageModel();
+let pageModel
 
 export function navigatingTo(args: EventData) {
-    let page = <Page>args.object;  
-    model.wizard = page.navigationContext.wizard;
-    page.bindingContext = model;
+    let page = <Page>args.object
+    pageModel = new PageModel(appModel.userprofile, page.navigationContext.wizard)
+    page.bindingContext = pageModel
+}
+
+export function navigatedFrom() {
+    if (!pageModel.skip) {
+        apply();
+    }
 }
 
 export function next() {
-    model.wizard.next().navigate();
-    // frame.topmost().navigate({
-    //     moduleName: '/views/set-blood-station',
-    //     context: {wizard: model.get('wizard')}}
-    // );
+    pageModel.wizard.next().navigate()
 }
 
-export function apply() {
-    const bt = BLOOD_TYPES[model.get('selectedIndex')];
-    console.log("apply ["+bt+"]");
-    appModel.updateUserProfile({bloodType:bt});
-    model.wizard.next().navigate();
+export function skip() {
+    pageModel.skip = true
+    next()
+}
+
+function apply() {
+    appModel.updateUserProfile({bloodType:BLOOD_TYPES[pageModel.selectedIndex]})
 }

@@ -1,4 +1,4 @@
-<Page xmlns="http://schemas.nativescript.org/tns.xsd" navigatingTo="navigatingTo" class="page">
+<Page xmlns="http://schemas.nativescript.org/tns.xsd" navigatingTo="navigatingTo" navigatedFrom="navigatedFrom" class="page">
 
 <Page.actionBar>
     <ActionBar title="Ustaw płeć" icon="" class="action-bar">
@@ -11,8 +11,8 @@
 
     <ListPicker row="1" items="{{sex}}" selectedIndex="{{selectedIndex}}"></ListPicker>
     
-    <Button text="Ustaw" tap="apply" class="btn btn-primary btn-active" visibility="{{wizard?'visible':'collapse'}}"/>
-    <Button text="Pomiń" tap="next" class="btn" visibility="{{wizard?'visible':'collapse'}}"/>
+    <Button text="Ustaw" tap="next" class="btn btn-primary btn-active" visibility="{{wizard?'visible':'collapse'}}"/>
+    <Button text="Pomiń" tap="skip" class="btn" visibility="{{wizard?'visible':'collapse'}}"/>
 
 </StackLayout>
 
