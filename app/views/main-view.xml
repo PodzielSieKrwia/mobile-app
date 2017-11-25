@@ -2,12 +2,45 @@
 
 <Page.actionBar>
     <ActionBar title="Podziel się krwią" icon="" class="action-bar">
+        <ActionItem
+            tap="settings"
+            ios.systemIcon="2" ios.position="right"
+            android.systemIcon="ic_sysbar_quicksettings" android.position="actionBar"/>
     </ActionBar>
 </Page.actionBar>
 
 <StackLayout class="p-20">
+    <Label text="{{userStation.name}}"/>
+
+    <Label text="Zapasy krwi"/>
+
+    <StackLayout visibility="{{inventory?'visible':'collapse'}}">
+
+    <StackLayout orientation="horizontal">
+        <Label text="0+"/>
+        <Label text="{{inventory.byType['0+']}}"/>
+    </StackLayout>
+
+    <StackLayout orientation="horizontal">
+        <Label text="0-"/>
+        <Label text="{{inventory.byType['0-']}}"/>
+    </StackLayout>
+
+    <StackLayout orientation="horizontal">
+        <Label text="A+"/>
+        <Label text="{{inventory.byType['A+']}}"/>
+    </StackLayout>
+
+    <StackLayout orientation="horizontal">
+        <Label text="A-"/>
+        <Label text="{{inventory.byType['A-']}}"/>
+    </StackLayout>
+
+    </StackLayout>
+
+    <Label text="brak informacji" visibility="{{!inventory?'visible':'collapse'}}"/>
+    
     <Button text="Donacje" tap="donations"/>
-    <Button text="Ustawienia" tap="settings"/>
 </StackLayout>
 
 </Page>

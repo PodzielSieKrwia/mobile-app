@@ -5,8 +5,14 @@
     </ActionBar>
 </Page.actionBar>
 
-<StackLayout>
-    <ListView class="list-group" items="{{ stations }}" itemTap="onItemTap">
+<DockLayout stretchLastChild="true">
+
+    <StackLayout dock="bottom">
+    <Button text="Ustaw" tap="next" class="btn btn-primary btn-active" visibility="{{wizard?'visible':'collapse'}}"/>
+    <Button text="Pomiń" tap="skip" class="btn" visibility="{{wizard?'visible':'collapse'}}"/>
+    </StackLayout>
+
+    <ListView dock="top" class="list-group" items="{{ stations }}" itemTap="onItemTap">
         <ListView.itemTemplate>
             <StackLayout class="{{'list-group-item '+(selected?'active':'')}}">
                 <Label text="{{ station.name }}" textWrap="true"/>
@@ -14,8 +20,7 @@
         </ListView.itemTemplate>
     </ListView>
 
-    <Button text="Ustaw" tap="next" class="btn btn-primary btn-active" visibility="{{wizard?'visible':'collapse'}}"/>
-    <Button text="Pomiń" tap="skip" class="btn" visibility="{{wizard?'visible':'collapse'}}"/>
-</StackLayout>
+
+</DockLayout>
 
 </Page>

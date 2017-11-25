@@ -22,7 +22,8 @@ class PageModel extends Observable {
 
     constructor(appModel:AppModel, public wizard:Wizard) {
         super()
-        this.stations = appModel.stations.map(station=>(new StationRow(station)))
+        this.stations = Object.getOwnPropertyNames(appModel.stations).map(uid=>(new StationRow(appModel.stations[uid])))
+        this.stations.sort((r1,r2)=>((r1.station.city||'').localeCompare(r2.station.city||'')));
         this.selectedUid = (appModel.userprofile || {}).stationUid
     }
 

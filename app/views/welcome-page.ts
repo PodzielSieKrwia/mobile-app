@@ -27,33 +27,40 @@ class PageModel extends Observable {
 
 const pageModel = new PageModel(appModel);
 
+function onUserProfileLoaded(userProfile: UserProfile) {
+    if (!userProfile || !userProfile.wizardCompleted) {
+        console.log('userprofile - wizard not completed');
+        //go through wizard
+        navigateToWizard();
+    } else {
+        //we're good
+        navigateToMainView();
+    }
+}
+
+function onAuthChange(user:any) {
+    if (!user) {
+        pageModel.setStatus('logging anonymously');
+        appModel.doLoginAnonymously().then((user)=>{
+            //TODO takes a while to get here... is it emulator issue?
+            pageModel.setStatus('logged successfully');
+        }, error=>{
+            alert(error);
+        });
+    } else {
+        pageModel.setStatus('logged as user '+user.uid+', loading profile');
+    }
+}
+
 const onPropertyChange = (event:PropertyChangeData)=>{
     switch (event.propertyName) {
         case 'userprofile' :
-            const userProfile = event.value as UserProfile;
-            if (!userProfile || !userProfile.wizardCompleted) {
-                console.log('userprofile - wizard not completed');
-                //go through wizard
-                navigateToWizard();
-            } else {
-                //we're good
-                navigateToMainView();
-            }
+            if (!appModel.user) return //not logged in
+            onUserProfileLoaded(event.value as UserProfile);
             break;
         case 'user' :
-            const user = event.value;
-            if (!user) {
-                pageModel.setStatus('logging anonymously');
-                appModel.doLoginAnonymously().then((user)=>{
-                    //TODO takes a while to get here... is it emulator issue?
-                    pageModel.setStatus('logged successfully');
-                }, error=>{
-                    alert(error);
-                });
-            } else {
-                pageModel.setStatus('logged as user '+user.uid+', loading profile');
-            }
-        break;
+            onAuthChange(event.value);
+            break;
     }
 };
 
@@ -61,10 +68,10 @@ export function navigatingTo(args: EventData) {
     appModel.on('propertyChange', onPropertyChange);
     const page = args.object as Page;
     page.bindingContext = pageModel;
+    //init()
 }
 
 export function navigatedFrom() {
-    console.log('navigatedFrom');
     appModel.removeEventListener('propertyChange', onPropertyChange);
 }
 
@@ -92,6 +99,14 @@ export function logout() {
     appModel.doLogout().then(()=>pageModel.setStatus('logged out'),err=>alert(err));
 }
 
+/**
+ * first we need to initialise firebase (once).
+ * then we get async notification about user being logged or not
+ * at the same time (if user if logged in) we get userprofile and we can start
+ * 
+ * 
+ * appModel.doInit(loginHandler)
+ */
 export function init() {
     pageModel.set('isLoading',true);
     pageModel.setStatus('initializing');

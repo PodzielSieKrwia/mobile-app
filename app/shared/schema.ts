@@ -12,9 +12,20 @@ export interface Location {
     lng: number
 }
 
+export interface Message {
+    text:string
+}
+
+export interface Inventory {
+    byType?:{[index: string]: number}
+    messages?:Message[]
+    updatedAt:string
+}
+
 export interface Station {
-    uid?:string
-    name?:string
+    uid:string
+    name:string
+    city:string
     address?:string
     contact?: {
         phones?:Phone[]
@@ -22,7 +33,8 @@ export interface Station {
     }
     location? : Location
     website? : string
-    parent? : string
+    parentUid? : string
+    inventory? : Inventory
 }
 
 export interface Stations {

@@ -5,15 +5,20 @@
     </ActionBar>
 </Page.actionBar>
 
-<StackLayout class="p-20">
+<DockLayout stretchLastChild="true" class="p-20">
 
-    <Label text="Twoja płeć jest potrzebna do określenia okresu pomiędzy donacjami" textWrap="true"/>
-
-    <ListPicker row="1" items="{{sex}}" selectedIndex="{{selectedIndex}}"></ListPicker>
-    
+<StackLayout dock="bottom">
     <Button text="Ustaw" tap="next" class="btn btn-primary btn-active" visibility="{{wizard?'visible':'collapse'}}"/>
     <Button text="Pomiń" tap="skip" class="btn" visibility="{{wizard?'visible':'collapse'}}"/>
 
 </StackLayout>
+
+<StackLayout dock="top">
+    <Label text="Twoja płeć jest potrzebna do określenia okresu pomiędzy donacjami" textWrap="true"/>
+
+    <ListPicker row="1" items="{{sex}}" selectedIndex="{{selectedIndex}}"></ListPicker>
+</StackLayout>
+</DockLayout>
+
 
 </Page>

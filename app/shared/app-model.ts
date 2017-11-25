@@ -16,25 +16,27 @@ export class AppModel extends Observable {
 
   public user: User;
   public userprofile: UserProfile;
-  public stations: Station[];
+  private userProfileHandler: any; // {path:string,listeners[]}
+  public stations: {[uid:string]: Station}
+  private firebaseInitialized = false
 
   public doInit(): Promise<any> {
+
+    if (this.firebaseInitialized) {
+      console.log('fb already initialised')
+      return new Promise((resolve)=>{
+        this.notifyPropertyChange('user', this.user);
+        this.notifyPropertyChange('userprofile', this.userprofile);
+        resolve()
+      })
+    }
+
     this.set('bloodTypes',BLOOD_TYPES);
 
     return firebase.init({
         //storageBucket: 'gs://n-plugin-test.appspot.com',
         persist: true,
-        onAuthStateChanged: data => {
-          console.log('onAuthStateChanged '+JSON.stringify(data));
-          this.set('user',data.user);
-          if (data.user) {
-            //TODO in case of re-authentication, do we need to remove previous value listener?
-            firebase.addValueEventListener(result=>{
-              console.log('user profile change', JSON.stringify(result.value));
-              this.set('userprofile', result.value);
-            }, "/users/"+data.user.uid);
-          }
-        },
+        onAuthStateChanged: data => this.onAuthStateChanged(data),
         // testing push wiring in init for iOS:
       //   onPushTokenReceivedCallback: token => {
       //     // you can use this token to send to your own backend server,
@@ -71,7 +73,29 @@ export class AppModel extends Observable {
       );
   }
 
+  private onAuthStateChanged(data) {
+    console.log('onAuthStateChanged '+JSON.stringify(data));
+    
+    if (this.userProfileHandler) {
+      firebase.removeEventListeners(this.userProfileHandler.listeners, this.userProfileHandler.path);
+      this.userProfileHandler=null;
+    }
+    
+    //remove old data
+    this.set('userprofile',null);
+    this.set('user',data.user);
+
+    if (data.user) {
+      firebase.addValueEventListener(result=>{
+        const up = result.value ? result.value : {}; //avoid null
+        console.log('userprofile.change ('+ JSON.stringify(up)+', '+JSON.stringify(this.userprofile)+')');
+        this.set('userprofile', up);
+      }, "/users/"+data.user.uid).then(handler=>this.userProfileHandler=handler);
+    }
+  }
+
   private onFirebaseReady() {
+    this.firebaseInitialized = true;
     console.log("Firebase is ready");
     firebase.addValueEventListener(result=>{
       console.log('CONNECTED', result.value);
@@ -87,36 +111,11 @@ export class AppModel extends Observable {
   }
 
   private onStationsUpdate(stations: Stations) {
-    let _stations: Array<Station> = [];
+    let _stations = {}
     Object.getOwnPropertyNames(stations).forEach(uid=>{
-      _stations.push(Object.assign({uid:uid}, stations[uid]));
+      _stations[uid] = Object.assign({uid:uid}, stations[uid]);
     });
-    //console.log("_stations",_stations); 
     this.set("stations",_stations);
-  }
-
-  private onAuthStateChanged(data) {
-    if (data.loggedIn) {
-      console.log(JSON.stringify(data));
-      this.set('user', data.user);
-      firebase.update(
-        '/users/'+data.user.uid,
-        {
-          'bloodType' : '?',
-          'sex' : '?',
-          'platform' : isIOS ? 'ios' : 'android'
-        }
-      );
-    } else {
-      //TODO either display spinner, or go through wizard here and login at the end
-      /*
-        if we're offline, login will fail with FirebaseNetworkException.
-        we should probably ignore this error, and every time when we get back online, try login again,
-        the problem is though what to do with temporary user data that may be created in the meantime.
-      */
-      console.log('no user, login anonymously');
-      this.doLoginAnonymously();
-    }
   }
 
   public doLoginAnonymously(): Promise<any> {
@@ -156,7 +155,7 @@ export class AppModel extends Observable {
     } else {
       firebase.update('/users/'+user.uid, change); 
     }
-  } 
+  }
 /*
   public doLogAnayticsEvent(): void {
     firebase.analytics.logEvent({
