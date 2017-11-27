@@ -45,6 +45,7 @@ function onAuthChange(user:any) {
             //TODO takes a while to get here... is it emulator issue?
             pageModel.setStatus('logged successfully');
         }, error=>{
+            console.log('cant log in:'+JSON.stringify(error));
             alert(error);
         });
     } else {
