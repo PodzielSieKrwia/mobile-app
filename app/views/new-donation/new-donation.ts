@@ -1,6 +1,6 @@
 import { ShownModallyData,Page } from 'ui/page'
 import { Observable, EventData } from 'tns-core-modules/ui/frame/frame'
-import { Donation, DONATION_TYPES, MSG} from '../shared/schema'
+import { Donation, DONATION_TYPES, MSG} from '../../shared/schema'
 import * as moment from 'moment';
 
 import {SegmentedBarItem} from "tns-core-modules/ui/segmented-bar";

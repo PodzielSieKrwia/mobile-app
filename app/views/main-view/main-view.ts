@@ -1,8 +1,8 @@
 import { Page } from 'ui/page'
 import { EventData } from 'data/observable'
 import * as frame from 'ui/frame'
-import {appModel, AppModel} from '../shared/app-model'
-import {Station,Inventory} from '../shared/schema'
+import {appModel, AppModel} from '../../shared/app-model'
+import {Station,Inventory} from '../../shared/schema'
 
 class PageModel {
 

@@ -2,10 +2,10 @@ import { Page } from 'ui/page';
 import { EventData } from 'data/observable';
 import { Observable } from 'tns-core-modules/ui/frame/frame';
 import * as frame from 'ui/frame';
-import { AppModel, appModel } from '../shared/app-model'
-import {Wizard} from './wizard';
+import { AppModel, appModel } from '../../../shared/app-model'
+import {Wizard} from '../wizard';
 import { ObservableArray } from 'tns-core-modules/data/observable-array/observable-array';
-import {Station} from '../shared/schema'
+import {Station} from '../../../shared/schema'
 
 class StationRow extends Observable {
 

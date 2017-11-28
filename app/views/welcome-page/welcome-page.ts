@@ -1,10 +1,10 @@
 import { EventData,PropertyChangeData } from 'data/observable';
 import { Page } from 'ui/page';
-import { AppModel, appModel } from '../shared/app-model';
+import { AppModel, appModel } from '../../shared/app-model';
 import { Observable } from "tns-core-modules/data/observable";
 import * as frame from 'ui/frame';
-import { UserProfile } from '../shared/schema';
-import {Wizard} from './wizard';
+import { UserProfile } from '../../shared/schema';
+import {Wizard} from '../settings/wizard';
 
 
 /*
@@ -81,7 +81,7 @@ function navigateToWizard() {
 
     new Wizard([
             {moduleName:'views/set-blood-type',clearHistory:true},
-            {moduleName:'/views/set-blood-station'},
+            {moduleName:'views/set-blood-station'},
             {moduleName:'views/set-sex'},
             {moduleName:'views/main-view',clearHistory:true}    //TODO clearHistory here seems to break back nav from 'donations' ?
         ])

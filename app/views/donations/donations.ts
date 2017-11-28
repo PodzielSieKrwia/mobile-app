@@ -1,9 +1,9 @@
 import { Page } from 'ui/page';
 import { EventData } from 'data/observable';
 import * as frame from 'ui/frame';
-import {appModel,AppModel} from '../shared/app-model'
+import {appModel,AppModel} from '../../shared/app-model'
 import { Observable } from 'ui/frame';
-import {Donation} from '../shared/schema'
+import {Donation} from '../../shared/schema'
 
 
 var dateConverter = {

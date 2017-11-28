@@ -1,21 +1,22 @@
 import { Page } from 'ui/page';
 import { EventData } from 'data/observable';
-import {BLOOD_TYPES, UserProfile} from '../shared/schema';
 import { Observable } from 'tns-core-modules/ui/frame/frame';
 import * as frame from 'ui/frame';
-import {appModel} from '../shared/app-model';
-import {Wizard} from './wizard';
+import { ObservableArray } from 'tns-core-modules/data/observable-array/observable-array';
+import { appModel } from '../../../shared/app-model';
+import { SEX, MSG, UserProfile } from '../../../shared/schema';
+import {Wizard} from '../wizard';
 
 class PageModel extends Observable {
-
-    bloodTypes: string[]
-    selectedIndex:number
     skip:boolean
+    selectedIndex:number
+    sex = SEX.map(val=>(MSG.pl['sex.'+val]))
 
-    constructor(userprofile:UserProfile, public wizard:Wizard) {
-        super()
-        this.bloodTypes = BLOOD_TYPES
-        this.selectedIndex = userprofile ? BLOOD_TYPES.indexOf(userprofile.bloodType) : 0
+    constructor(userprofile:UserProfile, public wizard: Wizard) {
+        super();
+        if (userprofile) {
+            this.selectedIndex = SEX.indexOf(userprofile.sex)
+        }
     }
 }
 
@@ -29,7 +30,7 @@ export function navigatingTo(args: EventData) {
 
 export function navigatedFrom() {
     if (!pageModel.skip) {
-        apply();
+        apply()
     }
 }
 
@@ -43,5 +44,8 @@ export function skip() {
 }
 
 function apply() {
-    appModel.updateUserProfile({bloodType:BLOOD_TYPES[pageModel.selectedIndex]})
+    const sex = SEX[pageModel.selectedIndex]
+    if (sex) {
+        appModel.updateUserProfile({sex:sex})
+    }
 }
