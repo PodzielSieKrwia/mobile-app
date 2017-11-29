@@ -33,9 +33,9 @@ export function navigatingTo(args: EventData) {
 }
 
 export function settings() {
-    frame.topmost().navigate('/views/settings');
+    frame.topmost().navigate('/views/settings/settings/settings');
 }
 
 export function donations() {
-    frame.topmost().navigate('/views/donations');
+    frame.topmost().navigate('/views/donations/donations');
 }

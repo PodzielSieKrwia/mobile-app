@@ -15,7 +15,7 @@ moment.locale(LOCALE);
 app.getResources()['fromNow'] = (value)=>(moment(value).fromNow())
 app.getResources()['msg'] = (value, prefix)=>(MSG[LOCALE][prefix+value])
 
-app.start({ moduleName: 'views/welcome-page' });
+app.start({ moduleName: 'views/welcome-page/welcome-page' });
 /*
 Do not place any code after the application has been started as it will not
 be executed on iOS.

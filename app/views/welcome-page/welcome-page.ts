@@ -80,10 +80,10 @@ function navigateToWizard() {
     pageModel.set('isLoading', false);
 
     new Wizard([
-            {moduleName:'views/set-blood-type',clearHistory:true},
-            {moduleName:'views/set-blood-station'},
-            {moduleName:'views/set-sex'},
-            {moduleName:'views/main-view',clearHistory:true}    //TODO clearHistory here seems to break back nav from 'donations' ?
+            {moduleName:'views/settings/set-blood-type/set-blood-type',clearHistory:true},
+            {moduleName:'views/settings/set-blood-station/set-blood-station'},
+            {moduleName:'views/settings/set-sex/set-sex'},
+            {moduleName:'views/main-view/main-view',clearHistory:true}    //TODO clearHistory here seems to break back nav from 'donations' ?
         ])
         .navigate();
 }
@@ -91,7 +91,7 @@ function navigateToWizard() {
 function navigateToMainView() {
     pageModel.set('isLoading', false);
     frame.topmost().navigate({
-        moduleName: "views/main-view",
+        moduleName: "views/main-view/main-view",
         clearHistory: true  //this is either broken or clear history AFTER navigation is done :)
     });
 }

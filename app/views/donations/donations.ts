@@ -66,7 +66,7 @@ export function navigatingTo(args: EventData) {
 export function newDonation(args) {
     const page = <Page>args.object.page;
     const context = {};
-    page.showModal("views/new-donation", context, (donation?:Donation) => {
+    page.showModal("views/new-donation/new-donation", context, (donation?:Donation) => {
         //console.log(donation);
         const donations = (appModel.userprofile.donations || []).slice();
         donations.push(donation); //TODO validate, sort?
