@@ -18,8 +18,12 @@ class PageModel {
     }
 
     constructor(public appModel:AppModel) {
-        this.userStation = appModel.stations[appModel.userprofile.stationUid];
-        this.inventory = PageModel.findInventory(appModel.userprofile.stationUid, appModel.stations)
+        //TODO we need to observe these properties and update userStation/inventory
+        //it may happen that they are not populated here just yet
+        if (appModel.userprofile && appModel.stations) {
+            this.userStation = appModel.stations[appModel.userprofile.stationUid];
+            this.inventory = PageModel.findInventory(appModel.userprofile.stationUid, appModel.stations)
+        }
     }
     
 }
